@@ -1,60 +1,27 @@
 package com.example.springboot.day4assignment.Entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Spid")
-public class Spid extends Base{
+public class Spid extends Base {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
-    private User user;
+    private User userId;
+    @Enumerated(EnumType.STRING)
     private Status status;
+    @Enumerated(EnumType.STRING)
     private Type type;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Spid(LocalDateTime createdAt, String createdBy, User user, long id, Status status, Type type) {
-        super(createdAt, createdBy);
-        this.id = id;
-        this.status = status;
-        this.type = type;
-        this.user = user;
-    }
-
-    public Spid() {
-
-    }
-
-    public long getUserId() {
-        return id;
-    }
-
-    public User getId() {
-        return user;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
 }
-

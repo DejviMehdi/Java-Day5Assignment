@@ -4,9 +4,10 @@ import com.example.springboot.day4assignment.Entities.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+
+import java.util.Optional;
 
 @Repository
 public interface RUser extends CrudRepository <User, Long> {
-    List<User> findUserById(long id);
+    Optional<User> findUserById(long id);
 }

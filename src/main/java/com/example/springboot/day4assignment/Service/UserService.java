@@ -2,43 +2,39 @@ package com.example.springboot.day4assignment.Service;
 
 import com.example.springboot.day4assignment.Entities.User;
 import com.example.springboot.day4assignment.Repository.RUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class UserService {
-    @Autowired
-    private RUser userRepository;
 
-    public Optional<User> getUserById(long id) {
-        return userRepository.findById(id);
+
+    RUser userRepository;
+
+    UserService(RUser userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public User updateUserById(long id, String name, String surname, String email) throws Exception {
-        Optional<User> user = userRepository.findById(id);
+    public User createUser(User user) throws Exception {
+        Optional<User> findIfUserExists = userRepository.findUserById(user.getId());
 
-        if (user.isEmpty()) {
-            throw new Exception("User does not exist");
+        if (findIfUserExists.isPresent()) {
+            throw new Exception("User already exists");
         }
-
-        if (name != null) {
-            user.get().setName(name);
-        }
-
-        if (surname != null) {
-            user.get().setSurname(surname);
-        }
-
-        if (email != null) {
-            user.get().setEmail(email);
-        }
-
-        return userRepository.save(user.get());
-    }
-
-    public User createUser(User user) {
         return userRepository.save(user);
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).get();
+    }
+
+    public User updateUser(User user, long id) throws Exception {
+        if (userRepository.findUserById(id).isPresent()) {
+            user.setId(id);
+            return userRepository.save(user);
+        } else {
+            throw new Exception("User does not exists");
+        }
     }
 }
